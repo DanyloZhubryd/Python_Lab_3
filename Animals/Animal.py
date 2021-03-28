@@ -27,6 +27,10 @@ class Animal:
     def age_in_years(self):
         return self._age_in_years
 
+    @mass_in_kg.setter
+    def mass_in_kg(self, new_mass):
+        self._mass_in_kg = new_mass
+
     @species.setter
     def species(self, new_species):
         self._species = new_species
