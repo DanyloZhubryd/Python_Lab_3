@@ -19,7 +19,7 @@ def main():
     birds_calc = BirdManager(all_animals=new_york_zoo.all_animals)
     print(birds_calc.search_by_migratory(True, True))
     parrot_1.mass_in_kg = 700
-    print("{mass}".format(parrot_1.mass_in_kg))
+    print("{mass}".format(mass=parrot_1.mass_in_kg))
 
 
 if __name__ == '__main__':

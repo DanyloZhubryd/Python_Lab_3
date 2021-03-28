@@ -10,7 +10,8 @@ class Pelican(Bird):
                                       is_migratory, size_of_wings_in_cm)
 
     def swim(self):
-        return "░░░░░░░░░░░░░░░░░░░▄▄▄▄▄▄░░\n\
+        return "\n\
+░░░░░░░░░░░░░░░░░░░▄▄▄▄▄▄░░\n\
 ░░░░░░░▄▀▀▀▄░░░░░▄██{name}█░░░\n\
 ░░░▄███▀▒◐▒▒▌░░░░█▀▀▀▀▀░░░░\n\
 ░░░░░░░▌▒▒▒▒▐░░░▐░░░░░░░░░░\n\
@@ -20,7 +21,4 @@ class Pelican(Bird):
 ░░▀█▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓█▀▒▒ ▒▒\n\
 ▒▒▒▀█▓▐○▌▓▐○▌▓▐○▌▓█▀▒▒▒\n\
 ▒▒▒▒▒▒▀█▓▓▓▓▓▓▓▓▓█▀▒▒▒▒▒\n\
-▒▒▒▒▒▒▒▒▀▀▀▀▀▀▀▀▀▀▒▒▒▒▒▒▒".format(name=self.species)
-
-    def __repr__(self):
-        return "\nPelican:{mass}\n{swim}".format(mass=self.mass_in_kg, swim=self.swim())
+▒▒▒▒▒▒▒▒▀▀▀▀▀▀▀▀▀▀▒▒▒▒▒▒▒".format(name=self.animal_type)
