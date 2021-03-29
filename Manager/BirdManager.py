@@ -31,6 +31,7 @@ class BirdManager:
         return result
 
     def search_by_migratory(self, is_sort_by_mass=True, is_reversed=False):
+        self.search_results.clear()
         for i in self.all_birds:
             if i.is_migratory is True:
                 self.search_results.append(i)
@@ -40,10 +41,3 @@ class BirdManager:
             self.sort_by_feed(self.search_results, is_reversed)
         return self.search_results
 
-#    @property
-#   def all_birds(self):
-#        return self._all_birds
-
-#    @property
-#    def search_results(self):
-#        return self._search_results

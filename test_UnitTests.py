@@ -21,8 +21,7 @@ class TestBirdManager(unittest.TestCase):
                         is_migratory=True, size_of_wings_in_cm=65),
                 Pelican(species="Boba", mass_in_kg=17, feed_per_day_in_kg=2.7,
                         type_of_feed=Feed.FISH, age_in_years=10,
-                        is_migratory=True, size_of_wings_in_cm=68)
-            ]
+                        is_migratory=True, size_of_wings_in_cm=68)]
         self.bird_manager = BirdManager(self.all_animal_test_list)
 
     def test_search_birds(self):
@@ -53,14 +52,15 @@ class TestBirdManager(unittest.TestCase):
 
     def test_search_by_migratory(self):
         expected_result = []
-        for i in self.bird_manager.all_birds:
+        for i in self.all_animal_test_list:
             if i.is_migratory is True:
                 expected_result.append(i)
         expected_result.sort(key=attrgetter("mass_in_kg"), reverse=False)
-        self.assertEqual(self.bird_manager.search_by_migratory(True, False), expected_result)
+        self.assertCountEqual(self.bird_manager.search_by_migratory(True, False), expected_result)
         expected_result.sort(key=attrgetter("mass_in_kg"), reverse=True)
-        self.assertEqual(self.bird_manager.search_by_migratory(True, True), expected_result)
+        self.assertCountEqual(self.bird_manager.search_by_migratory(True, True), expected_result)
         expected_result.sort(key=attrgetter("feed_per_day_in_kg"), reverse=False)
-        self.assertEqual(self.bird_manager.search_by_migratory(False, False), expected_result)
+        self.assertCountEqual(self.bird_manager.search_by_migratory(False, False), expected_result)
         expected_result.sort(key=attrgetter("feed_per_day_in_kg"), reverse=True)
-        self.assertEqual(self.bird_manager.search_by_migratory(False, True), expected_result)
+        self.assertCountEqual(self.bird_manager.search_by_migratory(False, True), expected_result)
+

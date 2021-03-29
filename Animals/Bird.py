@@ -11,6 +11,7 @@ class Bird(Animal):
         self._is_migratory = is_migratory
         self._size_of_wings_in_cm = size_of_wings_in_cm
 
+
     @property
     def is_migratory(self):
         return self._is_migratory

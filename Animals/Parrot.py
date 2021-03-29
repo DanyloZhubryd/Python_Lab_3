@@ -12,3 +12,8 @@ class Parrot(Bird):
     def talk(self, speech=""):
         return "{species} says {speech}".format(species=self.species, speech=speech)
 
+    def __repr__(self):
+        return "({species}, {mass}, {feed}, {feed_type}, {age}, \
+{migratory}, {size})".format(species=self.species, mass=self.mass_in_kg, age=self.age_in_years,
+                                    feed=self.feed_per_day_in_kg, feed_type=self.type_of_feed,
+                                    migratory=self.is_migratory, size=self.size_of_wings_in_cm)
