@@ -1,7 +1,7 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, abort
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
-
+from marshmallow import fields
 # Init app
 app = Flask(__name__)
 # Database
@@ -12,7 +12,7 @@ ma = Marshmallow(app)
 
 
 class Bird(db.Model):
-    __tablename__ = 'Bird'
+    __tablename__ = 'bird'
     id = db.Column(db.Integer, primary_key=True)
     species = db.Column(db.String(50), unique=True)
     mass_in_kg = db.Column(db.Integer, nullable=False)
@@ -25,10 +25,22 @@ class Bird(db.Model):
         self.age_in_years = age_in_years
         self.is_migratory = is_migratory
 
+    def update(self, species, mass_in_kg, age_in_years, is_migratory):
+        self.__init__(species, mass_in_kg, age_in_years, is_migratory)
+
+
+def get_bird_by_id(id):
+    bird = Bird.query.get(id)
+    if not bird:
+        return abort(404)
+    return bird
+
 
 class BirdSchema(ma.Schema):
-    class Meta:
-        fields = ('id', 'species', 'mass_in_kg', 'age_in_years', 'is_migratory')
+    species = fields.String()
+    mass_in_kg = fields.Integer()
+    age_in_years = fields.Integer()
+    is_migratory = fields.Boolean()
 
 
 bird_schema = BirdSchema()
@@ -38,12 +50,8 @@ birds_schema = BirdSchema(many=True)
 # Create a bird
 @app.route('/bird', methods=['POST'])
 def add_bird():
-    species = request.json['species']
-    mass_in_kg = request.json['mass_in_kg']
-    age_in_years = request.json['age_in_years']
-    is_migratory = request.json['is_migratory']
-
-    new_bird = Bird(species, mass_in_kg, age_in_years, is_migratory)
+    fields = bird_schema.load(request.json)
+    new_bird = Bird(**fields)
     db.session.add(new_bird)
     db.session.commit()
 
@@ -53,7 +61,7 @@ def add_bird():
 # Get single bird
 @app.route('/bird/<id>', methods=['GET'])
 def get_bird(id):
-    bird = Bird.query.get(id)
+    bird = get_bird_by_id(id)
     return bird_schema.jsonify(bird)
 
 
@@ -61,33 +69,27 @@ def get_bird(id):
 @app.route('/bird', methods=['GET'])
 def get_birds():
     all_birds = Bird.query.all()
+    if not all_birds:
+        return abort(404)
     result = birds_schema.dump(all_birds)
-    return jsonify(result)
+    return birds_schema.jsonify(result)
 
 
+# Update Single bird
 @app.route('/bird/<id>', methods=['PUT'])
 def update_bird(id):
-    bird = Bird.query.get(id)
-
-    species = request.json['species']
-    mass_in_kg = request.json['mass_in_kg']
-    age_in_years = request.json['age_in_years']
-    is_migratory = request.json['is_migratory']
-
-    bird.species = species
-    bird.mass_in_kg = mass_in_kg
-    bird.age_in_years = age_in_years
-    bird.is_migratory = is_migratory
+    bird = get_bird_by_id(id)
+    fields = bird_schema.load(request.json)
+    bird.update(**fields)
 
     db.session.commit()
-
     return bird_schema.jsonify(bird)
 
 
 # Delete single bird
 @app.route('/bird/<id>', methods=['DELETE'])
 def delete_bird(id):
-    bird = Bird.query.get(id)
+    bird = get_bird_by_id(id)
     db.session.delete(bird)
     db.session.commit()
     return bird_schema.jsonify(bird)
